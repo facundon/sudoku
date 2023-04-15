@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { Modal } from './Modal';
 import { SudokuGameModel } from 'src/SudokuGameModel';
 
-interface RestartGameModalProps {
+interface RestartGameButtonProps {
   game: SudokuGameModel;
 }
 
-export const RestartGameModal: React.FC<RestartGameModalProps> = ({ game }) => {
+export const RestartGameButton: React.FC<RestartGameButtonProps> = ({ game }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>

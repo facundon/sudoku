@@ -5,7 +5,8 @@ import { SudokuGameModel } from './SudokuGameModel';
 import { useState } from 'react';
 import { Controls } from './components/Controls';
 import { PointsResume } from './components/PointsResume';
-import { RestartGameModal } from './components/RestartGameModal';
+import { RestartGameButton } from './components/RestartGameButton';
+import { WinModal } from './components/WinModal';
 
 export const MODAL_ROOT_ID = 'modal-root';
 
@@ -15,10 +16,11 @@ function App() {
   return (
     <>
       <div className='container' id='container'>
-        <RestartGameModal game={game} />
+        <RestartGameButton game={game} />
         <PointsResume game={game} />
         <SudokuMatrix game={game} />
         <Controls game={game} />
+        <WinModal game={game} />
       </div>
       <div id={MODAL_ROOT_ID} className='modal-root' />
     </>

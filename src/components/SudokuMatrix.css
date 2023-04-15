@@ -6,6 +6,7 @@
   border-radius: 10px;
   border: 1px solid var(--secondary);
   user-select: none;
+  cursor: pointer;
 }
 
 .row {
