@@ -4,16 +4,20 @@ export type Matrix = [Row, Row, Row, Row, Row, Row, Row, Row, Row];
 
 export class Sudoku {
   readonly matrixSize = 9;
-  readonly matrix: Matrix;
-  private readonly sampleRow = Array.from({ length: this.matrixSize }, (_, i) => i + 1);
+  readonly sampleRow = Array.from({ length: this.matrixSize }, (_, i) => i + 1);
+  private readonly matrix: Matrix;
 
   constructor() {
-    this.matrix = this.getEmptyMatrix();
+    this.matrix = Sudoku.getEmptyMatrix(this.matrixSize);
     this.fillMatrix();
   }
 
-  getEmptyMatrix(): Matrix {
-    return Array.from({ length: this.matrixSize }, () => Array.from({ length: this.matrixSize }, () => 0)) as Matrix;
+  static getEmptyMatrix(size: number): Matrix {
+    return Array.from({ length: size }, () => Array.from({ length: size }, () => 0)) as Matrix;
+  }
+
+  getMatrix(): Matrix {
+    return this.matrix;
   }
 
   private fillMatrix(rowIndex: number = 0, colIndex: number = 0): boolean {

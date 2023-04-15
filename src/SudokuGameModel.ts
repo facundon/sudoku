@@ -1,24 +1,32 @@
-import { makeObservable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { Matrix, Sudoku } from './Sudoku';
-import { Clue, SudokuSolver } from './SudokuSolver';
+import { Coordinate, SudokuSolver } from './SudokuSolver';
 
 export class SudokuGameModel {
-  matrix: Matrix;
+  readonly matrix: Matrix;
+  cellSelected: Coordinate | null = null;
+
   constructor() {
     const sudoku = new Sudoku();
     const solver = new SudokuSolver(sudoku);
-    const clues = solver.getClues();
-    this.matrix = sudoku.getEmptyMatrix();
-    this.assignCluesToMatrix(clues, sudoku.matrix);
+    this.matrix = solver.getInitialMatrix();
 
-    makeObservable(this, {});
+    makeObservable(this, {
+      matrix: observable,
+      cellSelected: observable,
+      setCellSelected: action.bound,
+      assignValue: action.bound,
+    });
   }
 
-  private assignCluesToMatrix(clues: Clue[], solvedMatrix: Matrix): void {
-    clues.forEach(clue => {
-      const rowIndex = clue[0];
-      const colIndex = clue[1];
-      this.matrix[rowIndex][colIndex] = solvedMatrix[rowIndex][colIndex];
-    });
+  setCellSelected(coordinate: Coordinate): void {
+    this.cellSelected = coordinate;
+  }
+
+  assignValue(value: number): void {
+    if (!this.cellSelected) return;
+
+    this.matrix[this.cellSelected[0]][this.cellSelected[1]] = value;
+    this.cellSelected = null;
   }
 }

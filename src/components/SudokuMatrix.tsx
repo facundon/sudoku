@@ -1,49 +1,55 @@
+import React from 'react';
+import { observer } from 'mobx-react-lite';
+import { EmptyField } from './EmptyField';
 import { SudokuGameModel } from 'src/SudokuGameModel';
 import type { Row } from 'src/Sudoku';
 import './SudokuMatrix.css';
 
-const EmptyField: React.FC = () => {
-  return <div className='cell' />;
-};
+interface RowProps {
+  row: Row;
+  rowIndex: number;
+  game: SudokuGameModel;
+}
 
-const Row: React.FC<{ row: Row }> = ({ row }) => {
+const Row = observer<RowProps>(({ row, game, rowIndex }) => {
   return (
     <div className='column'>
       {row.map((cell, i) => {
         const showDivider = (i + 1) % 3 === 0 && i !== row.length - 1;
         return (
-          <>
+          <React.Fragment key={cell.toString() + i}>
             {cell ? (
-              <span className='cell' key={cell.toString() + i}>
-                {cell}
-              </span>
+              <span className='cell'>{cell}</span>
             ) : (
-              <EmptyField key={cell.toString() + i} />
+              <EmptyField
+                onClick={() => game.setCellSelected([rowIndex, i])}
+                isSelected={game.cellSelected ? game.cellSelected[0] === rowIndex && game.cellSelected[1] === i : false}
+              />
             )}
             {showDivider && <div className='v-divider' />}
-          </>
+          </React.Fragment>
         );
       })}
     </div>
   );
-};
+});
 
 interface SudokuMatrixProps {
   game: SudokuGameModel;
 }
 
-export const SudokuMatrix: React.FC<SudokuMatrixProps> = ({ game }) => {
+export const SudokuMatrix = observer<SudokuMatrixProps>(({ game }) => {
   return (
     <div className='row'>
       {game.matrix.map((row, i) => {
         const showDivider = (i + 1) % 3 === 0 && i !== game.matrix.length - 1;
         return (
-          <>
-            <Row row={row} key={row.toString() + i} />
+          <React.Fragment key={row.toString() + i}>
+            <Row row={row} rowIndex={i} game={game} />
             {showDivider && <div className='h-divider' />}
-          </>
+          </React.Fragment>
         );
       })}
     </div>
   );
-};
+});

@@ -1,0 +1,3 @@
+.empty-field-selected {
+  outline: 2px solid var(--primary);
+}
