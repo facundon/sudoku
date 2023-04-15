@@ -9,15 +9,10 @@ export class Sudoku {
 
   constructor() {
     this.matrix = Sudoku.getEmptyMatrix(this.matrixSize);
-    this.fillMatrix();
   }
 
   static getEmptyMatrix(size: number): Matrix {
     return Array.from({ length: size }, () => Array.from({ length: size }, () => 0)) as Matrix;
-  }
-
-  getMatrix(): Matrix {
-    return this.matrix;
   }
 
   getRandomMatrix(): Matrix {

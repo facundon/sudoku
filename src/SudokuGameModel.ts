@@ -3,8 +3,8 @@ import { Matrix } from './Sudoku';
 import { Coordinates, SudokuSolver } from './SudokuSolver';
 
 export class SudokuGameModel {
+  matrix: Matrix;
   readonly pointsReference = { row: 100, col: 100, box: 100 } as const;
-  readonly matrix: Matrix;
   readonly solver: SudokuSolver;
   errors: number = 0;
   points: number = 0;
@@ -25,6 +25,7 @@ export class SudokuGameModel {
       isGameEnded: observable,
       errors: observable,
       points: observable,
+      restart: action.bound,
     });
   }
 
@@ -34,6 +35,11 @@ export class SudokuGameModel {
 
   setIsGameEnded(value: boolean): void {
     this.isGameEnded = value;
+  }
+
+  restart(): void {
+    this.solver.reset();
+    this.matrix = this.solver.getInitialRandomMatrix();
   }
 
   assignValue(value: number): unknown {

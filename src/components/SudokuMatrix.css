@@ -4,7 +4,7 @@
   text-align: center;
   line-height: var(--cellSize);
   border-radius: 10px;
-  border: 1px solid black;
+  border: 1px solid var(--secondary);
   user-select: none;
 }
 
@@ -33,6 +33,7 @@
 .v-divider::after {
   width: 1px;
   background-color: var(--primary);
+  z-index: -1;
 }
 .v-divider::after {
   content: '';

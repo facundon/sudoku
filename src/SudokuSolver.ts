@@ -3,13 +3,19 @@ import { Matrix, Sudoku } from './Sudoku';
 export type Coordinates = [number, number];
 
 export class SudokuSolver {
-  private readonly matrixSize: number;
-  private readonly solvedMatrix: Matrix;
+  private matrixSize: number;
+  private solvedMatrix: Matrix;
 
   constructor() {
     const sudoku = new Sudoku();
     this.matrixSize = sudoku.matrixSize;
-    this.solvedMatrix = sudoku.getMatrix();
+    this.solvedMatrix = sudoku.getRandomMatrix();
+  }
+
+  reset(): void {
+    const sudoku = new Sudoku();
+    this.matrixSize = sudoku.matrixSize;
+    this.solvedMatrix = sudoku.getRandomMatrix();
   }
 
   getInitialRandomMatrix(): Matrix {

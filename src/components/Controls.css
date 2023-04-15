@@ -10,4 +10,6 @@
   border: 1px solid var(--primary);
   padding: 10px 15px;
   cursor: pointer;
+  color: white;
+  font-weight: 600;
 }

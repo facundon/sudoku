@@ -1,7 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Skranji&display=swap');
+
 :root {
-  --primary: purple;
+  --primary: rgb(219, 26, 145);
+  --secondary: rgb(107, 37, 132);
   --cellSize: 30px;
   --gridGap: 10px;
+}
+
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  min-height: 100vh;
+  background: radial-gradient(
+    circle,
+    #222222 400px,
+    rgb(107, 37, 132) clamp(450px, 40%, 500px),
+    rgb(70, 25, 109) clamp(460px, 60%, 600px),
+    rgba(20, 8, 33, 1) 85%
+  );
+  background-position: center;
+  background-repeat: repeat-y;
+  color: white;
+  font-family: 'Skranji', cursive;
 }
 
 .container {
@@ -12,4 +31,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.modal-root {
+  position: fixed;
+  top: 0;
 }
