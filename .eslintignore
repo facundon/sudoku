@@ -1,0 +1,14 @@
+# Folders
+node_modules/
+public/*
+!public/locales
+resources/
+
+# Files
+.eslintignore
+.prettierignore
+.gitignore
+.commitlintrc
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
