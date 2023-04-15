@@ -6,16 +6,20 @@ export class SudokuSolver {
   private matrixSize: number;
   private solvedMatrix: Matrix;
 
-  constructor() {
+  constructor(matrix?: Matrix | null) {
     const sudoku = new Sudoku();
     this.matrixSize = sudoku.matrixSize;
-    this.solvedMatrix = sudoku.getRandomMatrix();
+    this.solvedMatrix = matrix ?? sudoku.getRandomMatrix();
   }
 
   reset(): void {
     const sudoku = new Sudoku();
     this.matrixSize = sudoku.matrixSize;
     this.solvedMatrix = sudoku.getRandomMatrix();
+  }
+
+  getSolvedMatrix(): Matrix {
+    return this.solvedMatrix;
   }
 
   getInitialRandomMatrix(): Matrix {

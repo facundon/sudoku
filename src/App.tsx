@@ -1,7 +1,7 @@
 import 'normalize.css';
 import './App.css';
 import { SudokuMatrix } from './components/SudokuMatrix';
-import { SudokuGameModel } from './SudokuGameModel';
+import { SudokuGameModel, localStorageKeys } from './SudokuGameModel';
 import { useState } from 'react';
 import { Controls } from './components/Controls';
 import { PointsResume } from './components/PointsResume';
@@ -16,6 +16,7 @@ function App() {
   return (
     <>
       <div className='container' id='container'>
+        <p>Top Score: {localStorage.getItem(localStorageKeys.topScore) ?? 0}</p>
         <RestartGameButton game={game} />
         <PointsResume game={game} />
         <SudokuMatrix game={game} />
