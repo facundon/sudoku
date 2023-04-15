@@ -1,0 +1,42 @@
+.cell {
+  width: var(--cellSize);
+  height: var(--cellSize);
+  text-align: center;
+  line-height: var(--cellSize);
+  border-radius: 10px;
+  border: 1px solid black;
+  user-select: none;
+}
+
+.row {
+  display: flex;
+  gap: var(--gridGap);
+  flex-direction: column;
+}
+
+.column {
+  display: flex;
+  gap: var(--gridGap);
+}
+
+.h-divider {
+  height: 1px;
+  width: 110%;
+  background-color: var(--primary);
+  align-self: center;
+}
+
+.v-divider {
+  position: relative;
+}
+.v-divider,
+.v-divider::after {
+  width: 1px;
+  background-color: var(--primary);
+}
+.v-divider::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--cellSize) * -0.5);
+  height: calc(var(--cellSize) * 2);
+}
