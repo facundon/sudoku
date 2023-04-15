@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, autorun, makeObservable, observable } from 'mobx';
 import { Matrix } from './Sudoku';
 import { Coordinates, SudokuSolver } from './SudokuSolver';
 
@@ -8,6 +8,7 @@ export const localStorageKeys = {
   topScore: 'topScore',
   points: 'points',
   errors: 'errors',
+  time: 'time',
 } as const;
 
 export class SudokuGameModel {
@@ -18,6 +19,7 @@ export class SudokuGameModel {
   points: number = 0;
   cellSelected: Coordinates | null = null;
   isGameEnded = false;
+  time: number = 0;
 
   constructor() {
     const oldMatrix = localStorage.getItem(localStorageKeys.matrix);
@@ -25,11 +27,11 @@ export class SudokuGameModel {
     const solver = new SudokuSolver(solvedMatrix);
     this.solver = solver;
     this.matrix = oldMatrix ? JSON.parse(oldMatrix) : solver.getInitialRandomMatrix();
+    localStorage.setItem(localStorageKeys.solvedMatrix, btoa(JSON.stringify(solver.getSolvedMatrix())));
 
     this.points = Number(localStorage.getItem(localStorageKeys.points)) ?? 0;
     this.errors = Number(localStorage.getItem(localStorageKeys.errors)) ?? 0;
-    localStorage.setItem(localStorageKeys.matrix, JSON.stringify(this.matrix));
-    localStorage.setItem(localStorageKeys.solvedMatrix, btoa(JSON.stringify(solver.getSolvedMatrix())));
+    this.time = Number(localStorage.getItem(localStorageKeys.time));
 
     makeObservable(this, {
       matrix: observable,
@@ -41,7 +43,18 @@ export class SudokuGameModel {
       errors: observable,
       points: observable,
       restart: action.bound,
+      incrementOneSecond: action.bound,
+      time: observable,
     });
+
+    autorun(() => {
+      localStorage.setItem(localStorageKeys.matrix, JSON.stringify(this.matrix));
+      localStorage.setItem(localStorageKeys.time, this.time.toString());
+      localStorage.setItem(localStorageKeys.errors, this.errors.toString());
+      localStorage.setItem(localStorageKeys.points, this.points.toString());
+    });
+
+    setInterval(this.incrementOneSecond, 1000);
   }
 
   setCellSelected(coordinate: Coordinates): void {
@@ -56,6 +69,14 @@ export class SudokuGameModel {
     this.solver.reset();
     this.matrix = this.solver.getInitialRandomMatrix();
     localStorage.setItem(localStorageKeys.matrix, JSON.stringify(this.matrix));
+    localStorage.setItem(localStorageKeys.solvedMatrix, btoa(JSON.stringify(this.solver.getSolvedMatrix())));
+    this.time = 0;
+    this.errors = 0;
+    this.points = 0;
+  }
+
+  incrementOneSecond(): void {
+    this.time++;
   }
 
   assignValue(value: number): void {
@@ -64,22 +85,17 @@ export class SudokuGameModel {
     const isValid = this.solver.isValidValue(value, this.cellSelected);
     if (!isValid) {
       this.errors++;
-      localStorage.setItem(localStorageKeys.errors, this.errors.toString());
       return;
     }
 
     this.matrix[this.cellSelected[0]][this.cellSelected[1]] = value;
     this.addPoints();
 
-    localStorage.setItem(localStorageKeys.matrix, JSON.stringify(this.matrix));
-    localStorage.setItem(localStorageKeys.points, this.points.toString());
-
     if (this.matrix.every(row => row.every(Boolean))) this.setIsGameEnded(true);
     this.cellSelected = null;
   }
 
   addPoints(): void {
-    // TODO: add timer based points
     if (!this.cellSelected) return;
     const row = this.matrix[this.cellSelected[0]];
     const col = this.matrix.map(row => row[this.cellSelected?.at(1) as number]);
