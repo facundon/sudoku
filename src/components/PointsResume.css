@@ -1,0 +1,6 @@
+.points-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+  margin-bottom: 1em;
+}

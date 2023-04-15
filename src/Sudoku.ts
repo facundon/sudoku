@@ -20,6 +20,11 @@ export class Sudoku {
     return this.matrix;
   }
 
+  getRandomMatrix(): Matrix {
+    this.fillMatrix();
+    return this.matrix;
+  }
+
   private fillMatrix(rowIndex: number = 0, colIndex: number = 0): boolean {
     // Randomize the first row
     if (rowIndex === 0 && colIndex === 0) {
