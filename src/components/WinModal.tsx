@@ -9,8 +9,11 @@ interface WinModalProps {
 export const WinModal = observer<WinModalProps>(({ game }) => {
   return game.isGameEnded ? (
     <Modal
-      content='You win! \n Do you want to start another game?'
-      onCancel={() => game.setIsGameEnded(false)}
+      content='You win! Do you want to start another game?'
+      onCancel={() => {
+        game.setIsGameEnded(false);
+        game.stopTimer();
+      }}
       onConfirm={() => {
         game.restart();
         game.setIsGameEnded(false);

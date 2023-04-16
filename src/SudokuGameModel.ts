@@ -12,8 +12,9 @@ export const localStorageKeys = {
 } as const;
 
 export class SudokuGameModel {
-  readonly pointsReference = { row: 100, col: 100, box: 100 } as const;
+  readonly pointsReference = { row: 100, col: 100, box: 100, base: 30 } as const;
   readonly solver: SudokuSolver;
+  timerRef: NodeJS.Timer;
   topScore: number = 0;
   matrix: Matrix;
   errors: number = 0;
@@ -62,7 +63,7 @@ export class SudokuGameModel {
       localStorage.setItem(localStorageKeys.topScore, this.topScore.toString());
     });
 
-    setInterval(this.incrementOneSecond, 1000);
+    this.timerRef = setInterval(this.incrementOneSecond, 1000);
   }
 
   setCellSelected(coordinate: Coordinates): void {
@@ -82,6 +83,10 @@ export class SudokuGameModel {
     this.topScore = value;
   }
 
+  stopTimer(): void {
+    clearInterval(this.timerRef);
+  }
+
   restart(): void {
     this.solver.reset();
     this.matrix = this.solver.getInitialRandomMatrix();
@@ -90,6 +95,8 @@ export class SudokuGameModel {
     this.time = 0;
     this.errors = 0;
     this.points = 0;
+    this.stopTimer();
+    this.timerRef = setInterval(this.incrementOneSecond, 1000);
   }
 
   incrementOneSecond(): void {
@@ -113,14 +120,25 @@ export class SudokuGameModel {
     this.cellSelected = null;
   }
 
-  addPoints(): void {
+  private addPoints(): void {
     if (!this.cellSelected) return;
     const row = this.matrix[this.cellSelected[0]];
     const col = this.matrix.map(row => row[this.cellSelected?.at(1) as number]);
-    if (row.every(Boolean)) this.points += this.pointsReference.row;
-    if (col.every(Boolean)) this.points += this.pointsReference.col;
-    this.points++;
+    if (row.every(Boolean)) this.points += this.getPointsToAdd('row');
+    if (col.every(Boolean)) this.points += this.getPointsToAdd('col');
+    this.points += this.getPointsToAdd('base');
     if (this.points > this.topScore) this.setTopScore(this.points);
+  }
+
+  private getPointsToAdd(kind: keyof typeof this.pointsReference): number {
+    const maxPoints = this.pointsReference[kind];
+    const maxTime = 8 * 60; // In seconds.
+
+    const timeFactor = Math.max(0, (maxTime - this.time) / maxTime);
+    const mistakeFactor = Math.max(0, 1 - this.errors / 10);
+
+    const points = Math.floor(maxPoints * timeFactor * mistakeFactor);
+    return points || maxPoints / 5;
   }
 
   private getCellValueByCoordinates(): number | null {
