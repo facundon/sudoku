@@ -21,6 +21,7 @@ export class SudokuGameModel {
   cellSelected: Coordinates | null = null;
   isGameEnded = false;
   time: number = 0;
+  highlightNumber: number | null = null;
 
   constructor() {
     const oldMatrix = localStorage.getItem(localStorageKeys.matrix);
@@ -49,6 +50,8 @@ export class SudokuGameModel {
       time: observable,
       topScore: observable,
       setTopScore: action.bound,
+      highlightNumber: observable,
+      setHighlightNumber: action.bound,
     });
 
     autorun(() => {
@@ -64,6 +67,11 @@ export class SudokuGameModel {
 
   setCellSelected(coordinate: Coordinates): void {
     this.cellSelected = coordinate;
+    this.setHighlightNumber(this.getCellValueByCoordinates());
+  }
+
+  setHighlightNumber(number: number | null): void {
+    this.highlightNumber = number;
   }
 
   setIsGameEnded(value: boolean): void {
@@ -89,7 +97,8 @@ export class SudokuGameModel {
   }
 
   assignValue(value: number): void {
-    if (!this.cellSelected) return;
+    const currCellValue = this.cellSelected ? this.getCellValueByCoordinates() : null;
+    if (!this.cellSelected || currCellValue) return;
 
     const isValid = this.solver.isValidValue(value, this.cellSelected);
     if (!isValid) {
@@ -112,6 +121,11 @@ export class SudokuGameModel {
     if (col.every(Boolean)) this.points += this.pointsReference.col;
     this.points++;
     if (this.points > this.topScore) this.setTopScore(this.points);
+  }
+
+  private getCellValueByCoordinates(): number | null {
+    if (!this.cellSelected) return null;
+    return this.matrix[this.cellSelected[0]][this.cellSelected[1]];
   }
 
   private getSolvedMatrixFromStorage(): Matrix | null {

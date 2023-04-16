@@ -1,0 +1,7 @@
+.cell-selected {
+  outline: 2px solid var(--primary);
+}
+
+.cell-highlighted {
+  color: springgreen;
+}
