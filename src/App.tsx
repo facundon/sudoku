@@ -7,6 +7,7 @@ import { Controls } from './components/Controls';
 import { PointsResume } from './components/PointsResume';
 import { RestartGameButton } from './components/RestartGameButton';
 import { WinModal } from './components/WinModal';
+import { TopScore } from './components/TopScore';
 
 export const MODAL_ROOT_ID = 'modal-root';
 
@@ -16,7 +17,7 @@ function App() {
   return (
     <>
       <div className='container' id='container'>
-        <p>Top Score: {localStorage.getItem(localStorageKeys.topScore) ?? 0}</p>
+        <TopScore game={game} />
         <RestartGameButton game={game} />
         <PointsResume game={game} />
         <SudokuMatrix game={game} />

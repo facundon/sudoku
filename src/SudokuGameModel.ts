@@ -14,6 +14,7 @@ export const localStorageKeys = {
 export class SudokuGameModel {
   readonly pointsReference = { row: 100, col: 100, box: 100 } as const;
   readonly solver: SudokuSolver;
+  topScore: number = 0;
   matrix: Matrix;
   errors: number = 0;
   points: number = 0;
@@ -31,7 +32,8 @@ export class SudokuGameModel {
 
     this.points = Number(localStorage.getItem(localStorageKeys.points)) ?? 0;
     this.errors = Number(localStorage.getItem(localStorageKeys.errors)) ?? 0;
-    this.time = Number(localStorage.getItem(localStorageKeys.time));
+    this.time = Number(localStorage.getItem(localStorageKeys.time)) ?? 0;
+    this.topScore = Number(localStorage.getItem(localStorageKeys.topScore)) ?? 0;
 
     makeObservable(this, {
       matrix: observable,
@@ -45,6 +47,8 @@ export class SudokuGameModel {
       restart: action.bound,
       incrementOneSecond: action.bound,
       time: observable,
+      topScore: observable,
+      setTopScore: action.bound,
     });
 
     autorun(() => {
@@ -52,6 +56,7 @@ export class SudokuGameModel {
       localStorage.setItem(localStorageKeys.time, this.time.toString());
       localStorage.setItem(localStorageKeys.errors, this.errors.toString());
       localStorage.setItem(localStorageKeys.points, this.points.toString());
+      localStorage.setItem(localStorageKeys.topScore, this.topScore.toString());
     });
 
     setInterval(this.incrementOneSecond, 1000);
@@ -63,6 +68,10 @@ export class SudokuGameModel {
 
   setIsGameEnded(value: boolean): void {
     this.isGameEnded = value;
+  }
+
+  setTopScore(value: number): void {
+    this.topScore = value;
   }
 
   restart(): void {
@@ -102,9 +111,7 @@ export class SudokuGameModel {
     if (row.every(Boolean)) this.points += this.pointsReference.row;
     if (col.every(Boolean)) this.points += this.pointsReference.col;
     this.points++;
-
-    const topScore = Number(localStorage.getItem(localStorageKeys.topScore));
-    if (this.points > topScore) localStorage.setItem(localStorageKeys.topScore, this.points.toString());
+    if (this.points > this.topScore) this.setTopScore(this.points);
   }
 
   private getSolvedMatrixFromStorage(): Matrix | null {
