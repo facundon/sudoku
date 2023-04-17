@@ -126,6 +126,17 @@ export class SudokuGameModel {
     const col = this.matrix.map(row => row[this.cellSelected?.at(1) as number]);
     if (row.every(Boolean)) this.points += this.getPointsToAdd('row');
     if (col.every(Boolean)) this.points += this.getPointsToAdd('col');
+
+    const subRow = Math.floor(this.cellSelected[0] / 3) * 3;
+    const subCol = Math.floor(this.cellSelected[1] / 3) * 3;
+    let assignBoxPoints = true;
+    for (let i = subRow; i < subRow + 3; i++) {
+      for (let j = subCol; j < subCol + 3; j++) {
+        if (this.matrix[i][j] === 0) assignBoxPoints = false;
+      }
+    }
+    if (assignBoxPoints) this.points += this.getPointsToAdd('box');
+
     this.points += this.getPointsToAdd('base');
     if (this.points > this.topScore) this.setTopScore(this.points);
   }
