@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Skranji&display=swap');
 
 :root {
-  --primary: rgb(219, 26, 145);
-  --secondary: rgb(107, 37, 132);
+  --primary: #db1a91;
+  --secondary: #6b2584;
+  --secondaryDarker: #46196d;
+  --textDark: #222222;
   --cellSize: 30px;
   --gridGap: 10px;
 }
@@ -12,9 +14,9 @@ body {
   min-height: 100vh;
   background: radial-gradient(
     circle,
-    #222222 400px,
-    rgb(107, 37, 132) clamp(450px, 40%, 500px),
-    rgb(70, 25, 109) clamp(460px, 60%, 600px),
+    var(--textDark) 400px,
+    var(--secondary) clamp(450px, 40%, 500px),
+    var(--secondaryDarker) clamp(460px, 60%, 600px),
     rgba(20, 8, 33, 1) 85%
   );
   background-position: center;

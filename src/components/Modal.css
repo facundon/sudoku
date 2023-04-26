@@ -7,16 +7,15 @@
 }
 
 .modal-container-inner {
-  margin-inline: 25px;
   background: #a4363e;
-  padding: 30px;
+  padding: 18px;
   border-radius: 30px;
-  width: 640px;
+  width: 300px;
 }
 
 .modal-content {
   background: radial-gradient(#fffbf3, #ffe19e);
-  padding: 24px;
+  padding: 8px;
   box-sizing: border-box;
   border-radius: 20px 18px 20px 18px;
   box-shadow: 0px 0px 0px 6px #5e1e21, 0px 0px 8px 6px #84222b, inset 0px 0px 15px 0px #614506, 6px 6px 1px 1px #e66565,
@@ -24,27 +23,27 @@
   text-align: center;
 }
 .modal-content p {
-  font-size: 56px;
-  padding: 40px;
+  font-size: 20px;
+  padding: 8px;
   box-sizing: border-box;
-  color: #461417;
+  color: var(--textDark);
 }
 
 .modal-buttons {
-  margin-top: 40px;
+  margin-top: 20px;
   display: flex;
   justify-content: normal;
   align-items: center;
-  gap: 30px;
+  gap: 20px;
   box-sizing: border-box;
 }
 .modal-buttons button {
-  padding: 20px;
+  padding: 6px;
   flex: 1;
   border-radius: 20px;
   border: 2px solid #49181e;
   color: #fff;
-  font-size: 32px;
+  font-size: 20px;
   text-shadow: 1px 2px 3px #000000;
   cursor: pointer;
 }
